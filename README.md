@@ -1,5 +1,5 @@
 # Terraform Route53 alias
-*This ansible role is created and maintained by [Media Pop](https://www.mediapop.co), a software consultancy. Hire us to solve your DevOps challenges.*
+*This terraform module is maintained by [Media Pop](https://www.mediapop.co), a software consultancy. Hire us to solve your DevOps challenges.*
 
 Terraform module to simplify creating aliased A (IPv4) and AAAA (IPv6) records across a list of records.
 
