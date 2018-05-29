@@ -8,10 +8,14 @@ Terraform module to simplify creating aliased A (IPv4) and AAAA (IPv6) records a
 ```hcl
 module "route53-alias" {
   source = "mediapop/route53-alias/aws"
-  zone_name = "mediapop.co."
-  zone_records = ["mediapop.co", "www.mediapop.co"]
+
+  domains = {
+    "mediapop.co." = ["www.mediapop.co"]
+    "mediapop.sg." = ["mediapop.sg", "www.mediapop.sg"]
+  }
+
   alias_hosted_zone_id = "${aws_cloudfront_distribution.cloudfront.hosted_zone_id}"
-  alias_domain_name = "${aws_cloudfront_distribution.cloudfront.domain_name}"
+  alias_domain_name    = "${aws_cloudfront_distribution.cloudfront.domain_name}"
 }
 ```
 
@@ -19,11 +23,10 @@ module "route53-alias" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| zone_name | The Route53 zone name | string | - | yes |
-| zone_records | The records to create | list | - | yes |
+| domains | Map of zone names with records. | map | - | yes |
 | alias_hosted_zone_id | The zone_id to target | string | - | yes |
 | alias_domain_name | The domain name to target | string | - | yes |
-| records | What records types to bind. Defaults to both | list | \["A", "AAAA"] | no |
+| record_types | The record types | list | ["A", "AAAA"] | no |
 
 ## License
 

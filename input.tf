@@ -1,11 +1,6 @@
-variable "zone_records" {
-  type = "list"
-  description = "The records to bind"
-}
-
-variable "zone_name" {
-  type = "string"
-  description = "The route53 zone-id"
+variable "domains" {
+  type        = "map"
+  description = "A map {\"zone.com.\" = [\"zone.com\",\"www.zone.com\"],\"foo.com\" = [\"foo.com\"] } of domains."
 }
 
 variable "alias_hosted_zone_id" {
@@ -16,11 +11,19 @@ variable "alias_domain_name" {
   description = "The domain_name on the hosted_zone_id to alias"
 }
 
-variable "records" {
-  type = "list"
+variable "record_types" {
+  type        = "list"
   description = "The types of records to set. Default is A and AAAA"
+
   default = [
     "A",
-    "AAAA"
+    "AAAA",
   ]
+}
+
+locals {
+  zones      = "${keys(var.domains)}"
+  records    = "${keys(transpose(var.domains))}"
+  record_map = "${transpose(var.domains)}"
+  type_count = "${length(var.record_types)}"
 }
