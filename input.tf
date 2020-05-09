@@ -1,5 +1,5 @@
 variable "domains" {
-  type        = "map"
+  type        = map(list(string))
   description = "A map {\"zone.com.\" = [\"zone.com\",\"www.zone.com\"],\"foo.com\" = [\"foo.com\"] } of domains."
 }
 
@@ -12,7 +12,7 @@ variable "alias_domain_name" {
 }
 
 variable "record_types" {
-  type        = "list"
+  type        = list(string)
   description = "The types of records to set. Default is A and AAAA"
 
   default = [
@@ -22,8 +22,8 @@ variable "record_types" {
 }
 
 locals {
-  zones      = "${keys(var.domains)}"
-  records    = "${keys(transpose(var.domains))}"
-  record_map = "${transpose(var.domains)}"
-  type_count = "${length(var.record_types)}"
+  zones      = keys(var.domains)
+  records    = keys(transpose(var.domains))
+  record_map = transpose(var.domains)
+  type_count = length(var.record_types)
 }
