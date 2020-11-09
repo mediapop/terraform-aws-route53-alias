@@ -62,7 +62,6 @@ resource "aws_cloudfront_distribution" "redirect" {
     max_ttl                = 0
     min_ttl                = 0
     target_origin_id       = "website"
-    compress               = true
     viewer_protocol_policy = "allow-all"
   }
 
