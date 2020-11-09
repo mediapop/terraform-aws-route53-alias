@@ -14,8 +14,8 @@ module "route53-alias" {
     "mediapop.sg." = ["mediapop.sg", "www.mediapop.sg"]
   }
 
-  alias_hosted_zone_id = "${aws_cloudfront_distribution.cloudfront.hosted_zone_id}"
-  alias_domain_name    = "${aws_cloudfront_distribution.cloudfront.domain_name}"
+  alias_hosted_zone_id = aws_cloudfront_distribution.cloudfront.hosted_zone_id
+  alias_domain_name    = aws_cloudfront_distribution.cloudfront.domain_name
 }
 ```
 

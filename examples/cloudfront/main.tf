@@ -2,23 +2,9 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 
-resource "random_string" "redirect-bucket" {
-  length  = 16
-  special = false
-}
-
-resource "aws_s3_bucket" "301" {
-  bucket = "${lower(random_string.redirect-bucket.result)}"
-  region = "us-east-1"
-
-  website {
-    redirect_all_requests_to = "https://mediapop.co"
-  }
-}
-
 resource "aws_cloudfront_distribution" "redirect" {
-  "origin" {
-    domain_name = "${aws_s3_bucket.301.website_endpoint}"
+  origin {
+    domain_name = "terraform-aws-route53-alias.uatdomains.com"
     origin_id   = "website"
 
     custom_origin_config {
@@ -35,11 +21,7 @@ resource "aws_cloudfront_distribution" "redirect" {
   enabled         = true
   is_ipv6_enabled = true
 
-  aliases = [
-    "terraform-aws-route53-alias.uatdomains.com",
-  ]
-
-  "default_cache_behavior" {
+  default_cache_behavior {
     allowed_methods = [
       "HEAD",
       "GET",
@@ -50,10 +32,10 @@ resource "aws_cloudfront_distribution" "redirect" {
       "GET",
     ]
 
-    "forwarded_values" {
+    forwarded_values {
       query_string = false
 
-      "cookies" {
+      cookies {
         forward = "none"
       }
     }
@@ -71,15 +53,15 @@ resource "aws_cloudfront_distribution" "redirect" {
     }
   }
 
-  "viewer_certificate" {
+  viewer_certificate {
     cloudfront_default_certificate = true
   }
 }
 
 module "alias" {
   source               = "../../"
-  alias_hosted_zone_id = "${aws_cloudfront_distribution.redirect.hosted_zone_id}"
-  alias_domain_name    = "${aws_cloudfront_distribution.redirect.domain_name}"
+  alias_hosted_zone_id = aws_cloudfront_distribution.redirect.hosted_zone_id
+  alias_domain_name    = aws_cloudfront_distribution.redirect.domain_name
 
   domains = {
     "uatdomains.com." = [
