@@ -4,7 +4,7 @@ This example just shows how to bind a group of domains to a CloudFront distribut
 
 ```hcl
 module "alias" {
-  source               = "../../"
+  source               = "mediapop/route53-alias/aws"
   alias_hosted_zone_id = "${aws_cloudfront_distribution.redirect.hosted_zone_id}"
   alias_domain_name    = "${aws_cloudfront_distribution.redirect.domain_name}"
 
